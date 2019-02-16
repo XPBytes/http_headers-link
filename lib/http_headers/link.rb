@@ -1,11 +1,12 @@
 require 'http_headers/utils/list'
+require 'delegate'
 
 module HttpHeaders
-  class Link < Utils::List
-    VERSION = "0.1.0"
+  class Link < DelegateClass(Array)
+    VERSION = '0.2.0'
 
     def initialize(value)
-      super value, entry_klazz: Link::Entry
+      __setobj__ HttpHeaders::Utils::List.new(value, entry_klazz: Link::Entry)
       indexify!
     end
 
@@ -25,7 +26,7 @@ module HttpHeaders
         freeze
       end
 
-      attr_reader :href
+      attr_reader :href, :index
 
       # noinspection RubyInstanceMethodNamingConvention
       def rel
@@ -40,7 +41,7 @@ module HttpHeaders
         parameters.fetch(String(parameter).to_sym)
       end
 
-      def inspect
+      def to_header
         to_s
       end
 
@@ -50,8 +51,8 @@ module HttpHeaders
 
       private
 
-      attr_writer :href
-      attr_accessor :parameters, :index
+      attr_writer :href, :index
+      attr_accessor :parameters
     end
 
     private
