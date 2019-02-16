@@ -1,10 +1,8 @@
+require 'http_headers/link/version'
 require 'http_headers/utils/list'
-require 'delegate'
 
 module HttpHeaders
-  class Link < DelegateClass(Array)
-    VERSION = '0.2.0'
-
+  class Link # < DelegateClass(Array) defined by version
     def initialize(value)
       __setobj__ HttpHeaders::Utils::List.new(value, entry_klazz: Link::Entry)
       indexify!
